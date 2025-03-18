@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+    ServerName your-pi-ip # or your domain name
+
+    ProxyPreserveHost On
+    ProxyPass / http://localhost:5000/ # default Blazor Server port
+    ProxyPassReverse / http://localhost:5000/
+
+    <Location "/"> # allow all hosts
+        Require all granted # or Require ip
+    </Location>
+
+    # WebSockets support (needed for Blazor Server real-time communication)
+    RewriteEngine on
+    RewriteCond %{HTTP:Upgrade} =websocket [NC] # check if the request is a websocket request
+    RewriteRule /(.*) ws://localhost:5000/$1 [P,L]
+</VirtualHost>

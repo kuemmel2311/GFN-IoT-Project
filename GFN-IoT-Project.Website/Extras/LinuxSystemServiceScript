@@ -1,0 +1,12 @@
+[Unit]
+Description=GFN IoT Project
+After=network.target
+
+[Service]
+ExecStart=/path/to/GFN-IoT-Project
+WorkingDirectory=/path/to/GFN-IoT-Project
+Restart=always
+User=username
+
+[Install]
+WantedBy=multi-user.target

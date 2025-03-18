@@ -1,0 +1,114 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudText Typo="Typo.h5" Class="ml-3">GFN-IoT-Project</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <MudMainContent Class="mt-16 pa-4">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+
+    private bool _isDarkMode = false;
+    private MudTheme? _theme = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _theme = new()
+            {
+                PaletteLight = _lightPalette,
+                PaletteDark = _darkPalette,
+                LayoutProperties = new LayoutProperties()
+            };
+    }
+
+    private void DarkModeToggle()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+    private readonly PaletteLight _lightPalette = new()
+        {
+            // Light Palette
+            Primary = "#5a4cda",
+            Surface = "#ffffff",
+            Background = "#f7f7fa",
+            BackgroundGray = "#ebebf0",
+            AppbarText = "#5a5a72",           // Darker text for visibility on a light background
+            AppbarBackground = "rgba(255, 255, 255, 0.8)",  // Light, semi-transparent Appbar background
+            DrawerBackground = "#f7f7fa",     // Light background for the drawer
+            ActionDefault = "#5f5b7a",        // Neutral color for icons and default actions
+            ActionDisabled = "#d1d1e0",       // Lightened disabled color
+            ActionDisabledBackground = "#dcdce5", // Softer background for disabled actions
+            TextPrimary = "#1f1f2d",          // Dark primary text for readability
+            TextSecondary = "#5a5a72",        // Secondary text color
+            TextDisabled = "#9c9ca8",         // Softer disabled text color
+            DrawerIcon = "#5a5a72",           // Drawer icon color to match text
+            DrawerText = "#5a5a72",           // Drawer text color
+            GrayLight = "#e5e5ee",            // Light gray for lighter backgrounds
+            GrayLighter = "#f2f2f7",          // Even lighter gray for background elements
+            Info = "#3a7eff",                 // Adjusted Info color for visibility
+            Success = "#34a853",              // Lighter green for success
+            Warning = "#fbbc05",              // Lighter yellow-orange for warnings
+            Error = "#ea4335",                // Slightly softer red for errors
+            LinesDefault = "#dedee5",         // Lighter lines for light theme
+            TableLines = "#dedee5",           // Lighter table lines
+            Divider = "#d1d1d8",              // Divider color, subtle and light
+            OverlayLight = "rgba(255, 255, 255, 0.8)" // Light overlay
+        };
+
+    private readonly PaletteDark _darkPalette = new()
+        {
+            Primary = "#7e6fff",
+            Surface = "#1e1e2d",
+            Background = "#1a1a27",
+            BackgroundGray = "#151521",
+            AppbarText = "#92929f",
+            AppbarBackground = "rgba(26,26,39,0.8)",
+            DrawerBackground = "#1a1a27",
+            ActionDefault = "#74718e",
+            ActionDisabled = "#9999994d",
+            ActionDisabledBackground = "#605f6d4d",
+            TextPrimary = "#b2b0bf",
+            TextSecondary = "#92929f",
+            TextDisabled = "#ffffff33",
+            DrawerIcon = "#92929f",
+            DrawerText = "#92929f",
+            GrayLight = "#2a2833",
+            GrayLighter = "#1e1e2d",
+            Info = "#4a86ff",
+            Success = "#3dcb6c",
+            Warning = "#ffb545",
+            Error = "#ff3f5f",
+            LinesDefault = "#33323e",
+            TableLines = "#33323e",
+            Divider = "#292838",
+            OverlayLight = "#1e1e2d80",
+        };
+
+    public string DarkLightModeButtonIcon => _isDarkMode switch
+    {
+        true => Icons.Material.Rounded.LightMode,
+        false => Icons.Material.Outlined.DarkMode,
+    };
+}
+
+
