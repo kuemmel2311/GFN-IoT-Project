@@ -15,6 +15,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Extras\" />
+    <Folder Include="Extras\Database\" />
   </ItemGroup>
 </Project>
