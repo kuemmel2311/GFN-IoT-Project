@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\gfn-iot-project.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:gfn-iot-project.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+      "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\components\\pages\\error.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:components\\pages\\error.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\extras\\buildcommand||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:extras\\buildcommand||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|c:\\users\\andrei caran\\documents\\github\\gfn-iot-project\\gfn-iot-project.website\\gfn-iot-project.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{0CFF520A-C509-4F53-B25B-F5DB13ACB591}|GFN-IoT-Project.csproj|solutionrelative:gfn-iot-project.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,6 +43,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "Components\\Layout\\MainLayout.razor",
+              "ToolTip": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "Components\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAuwEcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-19T11:17:15.273Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Error.razor",
+              "DocumentMoniker": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\Pages\\Error.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Error.razor",
+              "ToolTip": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\Pages\\Error.razor",
+              "RelativeToolTip": "Components\\Pages\\Error.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-19T11:17:07.232Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Components\\App.razor",
+              "ToolTip": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\App.razor",
+              "RelativeToolTip": "Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-19T11:17:01.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "Components\\Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Components\\Pages\\Home.razor",
+              "RelativeToolTip": "Components\\Pages\\Home.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-19T11:16:47.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "GFN-IoT-Project",
               "DocumentMoniker": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\GFN-IoT-Project.csproj",
               "RelativeDocumentMoniker": "GFN-IoT-Project.csproj",
@@ -38,7 +106,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "BuildCommand",
               "DocumentMoniker": "C:\\Users\\Andrei Caran\\Documents\\GitHub\\GFN-IoT-Project\\GFN-IoT-Project.Website\\Extras\\BuildCommand",
               "RelativeDocumentMoniker": "Extras\\BuildCommand",
