@@ -3,8 +3,8 @@ Description=GFN IoT Project
 After=network.target
 
 [Service]
-ExecStart=/path/to/GFN-IoT-Project
-WorkingDirectory=/path/to/GFN-IoT-Project
+ExecStart=/path/to/webiste/exe
+WorkingDirectory=/path/to/webiste/
 Restart=always
 User=username
 
