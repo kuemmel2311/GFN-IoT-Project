@@ -1,5 +1,7 @@
 using GFN_IoT_Project.Components;
+using GFN_IoT_Project.Extensions.Database;
 using MudBlazor.Services;
+using SQLitePCL;
 
 namespace GFN_IoT_Project
 {
@@ -7,6 +9,11 @@ namespace GFN_IoT_Project
     {
         public static void Main(string[] args)
         {
+
+            //craete the databse if not exists 
+            Batteries.Init();
+            DatabaseManager.CreateDatabase();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add MudBlazor services
