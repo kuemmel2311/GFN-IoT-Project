@@ -1,31 +1,82 @@
 ﻿@page "/"
-
-<PageTitle>Home</PageTitle>
-
-<MudGrid  Justify="Justify.Center">
-
-    <MudItem xs="4">
-         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-             <MudChart ChartType="ChartType.Line" ChartSeries="@_series" @bind-SelectedIndex="_index" Width="95%" Height="95%" ChartOptions="@_options" AxisChartOptions="_axisChartOptions" />
-         </MudPaper>
-    </MudItem>
-    <MudItem xs="4">
-         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-             <MudChart ChartType="ChartType.Line" ChartSeries="@_series" @bind-SelectedIndex="_index" Width="95%" Height="95%" ChartOptions="@_options" AxisChartOptions="_axisChartOptions" />
-         </MudPaper>
-    </MudItem>
-    <MudItem xs="4">
-         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-             <MudChart ChartType="ChartType.Line" ChartSeries="@_series" @bind-SelectedIndex="_index" Width="95%" Height="95%" ChartOptions="@_options" AxisChartOptions="_axisChartOptions" />
-         </MudPaper>
-    </MudItem>
+@inject ISnackbar Snackbar
 
 
-</MudGrid>
+@code {
+    // Current values
+    private double currentTemperature { get; set; } = 22;
+    private int currentHumidity { get; set; } = 45;
+    private int currentPressure { get; set; } = 1013;
+    private int currentAirQuality { get; set; } = 35;
+    private string dayTimeStatus { get; set; } = "Tag";
 
-@code{
-    private int _index = -1; //default value cannot be 0 -> first selectedindex is 0.
-    private AxisChartOptions _axisChartOptions = new AxisChartOptions();
-    private List<ChartSeries> _series = new List<ChartSeries>();
-    private ChartOptions _options = new ChartOptions();
+    // Chart data
+    private string[] dayLabels = new string[] { "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So" };
+    private List<ChartSeries> temperatureSeries = new List<ChartSeries>();
+    private List<ChartSeries> humiditySeries = new List<ChartSeries>();
+    private List<ChartSeries> pressureSeries = new List<ChartSeries>();
+    private List<ChartSeries> airQualitySeries = new List<ChartSeries>();
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    private void UpdateData()
+    {
+        // Check if any values are in danger zone and show notification
+        if (IsTemperatureDangerous(currentTemperature) ||
+            IsHumidityDangerous(currentHumidity) ||
+            IsAirQualityDangerous(currentAirQuality))
+        { }
+
+        // Force UI update
+        InvokeAsync(StateHasChanged);
+    }
+   
+    
+    // Helper methods for color coding
+    private Color GetTemperatureColor(double temp)
+    {
+        if (temp < 18 || temp > 28) return Color.Error;
+        if (temp < 20 || temp > 25) return Color.Warning;
+        return Color.Success;
+    }
+    
+    private Color GetHumidityColor(int humidity)
+    {
+        if (humidity < 30 || humidity > 70) return Color.Error;
+        if (humidity < 40 || humidity > 60) return Color.Warning;
+        return Color.Success;
+    }
+    
+    private Color GetPressureColor(int pressure)
+    {
+        if (pressure < 1000 || pressure > 1025) return Color.Warning;
+        return Color.Default;
+    }
+    
+    private Color GetAirQualityColor(int aqi)
+    {
+        if (aqi > 75) return Color.Error;
+        if (aqi > 50) return Color.Warning;
+        return Color.Success;
+    }
+    
+
+    // Danger checks
+    private bool IsTemperatureDangerous(double temp)
+    {
+        return temp < 15 || temp > 35;
+    }
+    
+    private bool IsHumidityDangerous(int humidity)
+    {
+        return humidity < 20 || humidity > 80;
+    }
+    
+    private bool IsAirQualityDangerous(int aqi)
+    {
+        return aqi > 75;
+    }
 }
