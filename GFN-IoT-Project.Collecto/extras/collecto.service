@@ -1,0 +1,11 @@
+[Unit]
+Description=GFN IoT Collecto
+After=network.target
+
+[Service]
+ExecStart=/home/path/to/service.sh
+Restart=always
+User=useraccount
+
+[Install]
+WantedBy=multi-user.target
