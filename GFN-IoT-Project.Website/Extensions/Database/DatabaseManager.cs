@@ -9,7 +9,6 @@ namespace GFN_IoT_Project.Extensions.Database
         private static string connectionString { get { return "Data Source=Extras/Database/weatherStation.db"; } }
         private static string sqlFilePath { get { return "Extras/Database/CreateTabels.sql"; } }
         private static string dbFilePath { get { return "Extras/Database/weatherStation.db"; } }
-
         public static void CreateDatabase()
         {
             string directoryPath = Path.GetDirectoryName(dbFilePath)!;
@@ -60,7 +59,6 @@ namespace GFN_IoT_Project.Extensions.Database
                 return rows.ToList();
             }
         }
-
         // Loads a single data item from the database using the specified SQL query and parameters.
         public async Task<T> LoadDataType<T, U>(string sql, U parameters)
         {

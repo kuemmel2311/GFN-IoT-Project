@@ -1,6 +1,139 @@
 ﻿@page "/"
 @inject ISnackbar Snackbar
 
+@using System.Linq
+@using System.Collections.Generic
+@using MudBlazor
+@using MudBlazor.Charts
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4">
+    <!-- Page Title -->
+    <MudText Typo="Typo.h4" Class="mb-4 text-center">Real Time Update</MudText>
+    
+    <!-- Top Row Cards -->
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="2">
+            <MudCard Elevation="3" Class="rounded-lg">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Temperatur</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetTemperatureColor(currentTemperature)">@currentTemperature°C</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        
+        <MudItem xs="12" sm="6" md="2">
+            <MudCard Elevation="3" Class="rounded-lg">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Luftfeuchtigkeit</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetHumidityColor(currentHumidity)">@currentHumidity%</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        
+        <MudItem xs="12" sm="6" md="2">
+            <MudCard Elevation="3" Class="rounded-lg">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Luftdruck</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetPressureColor(currentPressure)">@currentPressure hPa</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        
+        <MudItem xs="12" sm="6" md="2">
+            <MudCard Elevation="3" Class="rounded-lg">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Luftqualität</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetAirQualityColor(currentAirQuality)">@currentAirQuality AQI</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        
+        <MudItem xs="12" sm="6" md="2">
+            <MudCard Elevation="3" Class="rounded-lg">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Tag-Nacht Zeit</MudText>
+                    <MudText Typo="Typo.h5">@dayTimeStatus</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <!-- Charts and Gauges Section -->
+    <MudGrid Class="mt-4">
+        <!-- Charts -->
+        <MudItem xs="12" md="8">
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudCard Elevation="3" Class="rounded-lg">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6">Temperatur Chart</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@temperatureSeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                                <CustomGraphics>
+                                </CustomGraphics>
+                            </MudChart>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard Elevation="3" Class="rounded-lg">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6">Luftfeuchtigkeit Chart</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@humiditySeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                                <CustomGraphics>
+                                </CustomGraphics>
+                            </MudChart>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard Elevation="3" Class="rounded-lg">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6">Luftdruck Chart</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@pressureSeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                                <CustomGraphics>
+                                </CustomGraphics>
+                            </MudChart>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard Elevation="3" Class="rounded-lg">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6">Luftqualität Chart</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@airQualitySeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                                <CustomGraphics>
+
+                                </CustomGraphics>
+                            </MudChart>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        
+        <!-- Right Column - Gauges and Warnings -->
+        <MudItem xs="12" md="4">
+            <MudCard Elevation="3" Class="rounded-lg h-100">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">Warnmeldungen mit Progressbar</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
 @code {
     // Current values
