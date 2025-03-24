@@ -17,7 +17,7 @@ namespace GFN_IoT_Project.API
         {
             try
             {
-                dbMen.SaveData<dynamic>();
+                //dbMen.SaveData<dynamic>();
                 return StatusCode(200);
             }
             catch (UnauthorizedAccessException ex)
