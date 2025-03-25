@@ -1,4 +1,5 @@
 #include <ArduinoJson.h>  // Include ArduinoJson library for JSON formatting
+#include "ArduinoLowPower.h" // Include lowpower modes for battery operation
 
 #define LDR_PIN A1    // Define LDR (Light Dependent Resistor) sensor pin
 #define MQ135_PIN A0  // Define MQ135 air quality sensor pin
@@ -34,5 +35,5 @@ void loop() {
     serializeJson(jsonDoc, Serial);
     Serial.println();  // Print a newline to separate JSON outputs
 
-    delay(1000);  
+    LowPower.sleep(1000); // Light sleep for 1 second
 }
