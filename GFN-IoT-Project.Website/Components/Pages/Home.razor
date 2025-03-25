@@ -1,18 +1,16 @@
 ﻿@page "/"
 @inject ISnackbar Snackbar
+@inject Extensions.LiveUpdateService LiveUpdateService
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4 d-flex flex-column align-center">
-    <!-- Page Title -->
-    <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-4 text-center">Real Time Update</MudText>
-
     <!-- Top Row Cards -->
     <MudGrid Justify="Justify.Center" Style="width: 100%;">
         <MudItem xs="12" sm="6" md="2" Style="flex-grow: 1;">
-            <MudCard Elevation="3" Class="rounded-lg h-100">
-                <MudCardContent Class="d-flex flex-column justify-center text-wrap text-break">
+            <MudCard Elevation="3" Class="animatedClass rounded-lg h-100">
+                <MudCardContent Class="animatedClass d-flex flex-column justify-center text-wrap text-break">
                     <div class="d-flex align-items-center">
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Thermostat" Color="Color.Primary" />
-                        <MudText Typo="Typo.subtitle2" Class="ml-2text-center">Temperatur</MudText>
+                        <MudText Typo="Typo.subtitle1" Class="ml-2text-center">Temperatur</MudText>
                     </div>
                     <MudText Typo="Typo.h5" Color="@GetTemperatureColor(currentTemperature)" Class="text-center">@currentTemperature°C</MudText>
                 </MudCardContent>
@@ -30,7 +28,7 @@
                 </MudCardContent>
             </MudCard>
         </MudItem>
-         <!-- Pressure card -->
+        <!-- Pressure card -->
         <MudItem xs="12" sm="6" md="2" Style="flex-grow: 1;">
             <MudCard Elevation="3" Class="rounded-lg h-100">
                 <MudCardContent Class="d-flex flex-column justify-center text-wrap text-break">
@@ -61,8 +59,9 @@
                     <div class="d-flex align-items-center">
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Brightness6" Color="Color.Primary" />
                         <MudText Typo="Typo.subtitle1" Class="ml-2 text-center">Tag-Nacht Zeit</MudText>
+                        <MudIcon Size="Size.Medium" Icon="@GetDayNightIcon(dayTimeStatus)" Color="Color.Primary" Class="ml-auto" />
                     </div>
-                    <MudText Typo="Typo.h5" Class="text-center">@dayTimeStatus</MudText>
+                    <MudText Typo="Typo.h6" Class="text-center">@currentDateTime</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -79,7 +78,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Temperatur Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@temperatureSeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@temperatureSeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -93,7 +92,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Luftfeuchtigkeit Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@humiditySeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@humiditySeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -107,7 +106,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Luftdruck Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@pressureSeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@pressureSeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -121,7 +120,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Luftqualität Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@airQualitySeries" XAxisLabels="@dayLabels" Width="100%" Height="300px">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@airQualitySeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -130,30 +129,26 @@
                 </MudItem>
             </MudGrid>
         </MudItem>
-
-        <!-- Right Column - Gauges and Warnings -->
-        <MudItem xs="12" md="4">
-            <MudCard Elevation="3" Class="rounded-lg" Style="height: 100%;">
-                <MudCardHeader>
-                    <MudText Typo="Typo.h6" Class="mx-auto">Warnmeldungen mit Progressbar</MudText>
-                </MudCardHeader>
-                <MudCardContent Style="height: calc(100% - 72px);">
-                    <!-- Content will stretch to fill available space -->
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
     </MudGrid>
 </MudContainer>
 @code {
     // Current values
-    private double currentTemperature { get; set; } = 42;
+    private double currentTemperature => LiveUpdateService.UpdateTemp;
     private int currentHumidity { get; set; } = 45;
     private int currentPressure { get; set; } = 1013;
     private int currentAirQuality { get; set; } = 35;
-    private string dayTimeStatus { get; set; } = "Tag";
+    private int dayTimeStatus { get; set; } = 800;
+    private string currentDateTime { get; set; } = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy");
 
     // Chart data
-    private string[] dayLabels = new string[] { "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So" };
+    private string[] hourLabels = new string[]
+    {
+    "00:00", "01:00", "02:00", "03:00", "04:00",
+    "05:00", "06:00", "07:00", "08:00", "09:00",
+    "10:00", "11:00", "12:00", "13:00", "14:00",
+    "15:00", "16:00", "17:00", "18:00", "19:00",
+    "20:00", "21:00", "22:00", "23:00"
+    };
     private List<ChartSeries> temperatureSeries = new List<ChartSeries>();
     private List<ChartSeries> humiditySeries = new List<ChartSeries>();
     private List<ChartSeries> pressureSeries = new List<ChartSeries>();
@@ -161,7 +156,14 @@
 
     protected override void OnInitialized()
     {
+        
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender){
 
+        }
+        currentDateTime = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy"); StateHasChanged();
     }
 
     private void UpdateData()
@@ -175,12 +177,34 @@
         // Force UI update
         InvokeAsync(StateHasChanged);
     }
+    private string GetDayNightIcon(int value){
+        //very dark (Night, moonloight)
+        if (value > 0 && value < 50)
+        {
+            return Icons.Material.Filled.NightsStay;
+        }
+        // Low Light (early morning or cloudy day)
+        else if (value > 50 && value < 200)
+        {
+            return Icons.Material.Filled.Star;
+        }
+        //Moderate Light ( room lighting, dim cloudy day)
+        else if (value > 200 && value < 500)
+        {
+            return Icons.Material.Filled.Cloud;
+        }
+        //Bright Light (Sunny day) burn! 
+        else
+        {
+            return Icons.Material.Filled.WbSunny;
+        }
 
+    }
 
     // Helper methods for color coding
     private Color GetTemperatureColor(double temp)
     {
-        if (temp < 18 || temp > 28) return Color.Error;
+        if (temp < 18 || temp > 31) return Color.Error;
         if (temp < 20 || temp > 25) return Color.Warning;
         return Color.Success;
     }

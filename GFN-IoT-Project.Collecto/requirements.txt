@@ -1,1 +1,4 @@
 pyserial
+smbus
+RPi.bme280 
+smbus2

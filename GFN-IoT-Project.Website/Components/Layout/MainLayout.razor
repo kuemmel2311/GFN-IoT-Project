@@ -6,16 +6,16 @@
 <MudSnackbarProvider />
 <MudLayout>
     <MudAppBar Elevation="1">
+        <MudSpacer />
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudText Typo="Typo.h4" Class="ml-3">Smart Weather Station</MudText>
+            <MudText Typo="Typo.h4" Color="Color.Primary" Class="ml-3">Smart Weather Station</MudText>
         </MudHidden>
 
         <MudHidden Breakpoint="Breakpoint.MdAndUp">
-            <MudText Typo="Typo.h6" Class="ml-3">Smart Weather Station</MudText>
+            <MudText Typo="Typo.h6" Color="Color.Primary" Class="ml-3">Smart Weather Station</MudText>
         </MudHidden>
         <MudSpacer />
         <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <MudMainContent Class="mt-16 pa-4">
         @Body
@@ -53,7 +53,6 @@
 
     private readonly PaletteLight _lightPalette = new()
         {
-            // Raspberry Pi Themed Light Palette
             Primary = "#c7053d",          // Raspberry Pi Red
             Surface = "#ffffff",          // White background for contrast
             Background = "#f5f5f5",       // Soft gray for a neutral feel
@@ -84,7 +83,6 @@
 
     private readonly PaletteDark _darkPalette = new()
         {
-            // Raspberry Pi Themed Dark Palette
             Primary = "#c7053d",          // Raspberry Pi Red
             Surface = "#1e1e2d",          // Dark background surface
             Background = "#1a1a27",       // Dark background for the overall theme

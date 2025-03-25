@@ -70,7 +70,7 @@ namespace GFN_IoT_Project.Extensions.Database
             }
         }
         // Saves data to the database using the specified SQL query and parameters.
-        public async Task SaveData<T>(string sql, T parameters)
+        public async Task InsertData<T>(string sql, T parameters)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
