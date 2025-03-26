@@ -1,44 +1,31 @@
-import serial 
+import time
+from smbus import SMBus
+from bme280 import BME280 
+import serial
+import json
 
-class Sensor_Luftqualität:
-    def__init__(self, port, baudrate=9600,) 
-
-    self.port = port
-    self.baudrate = baudrate 
-
-    try:
-        self.serial_conn = serial.Serial(port, baudrate)
-        print(f"Verbindung zu {port} hergestellt.")
-
-    except Exception as e :
-        print(f"Fehler beim Verbindung mit {port}: {e}")
-
-    def lese_daten(self):
-        if self.serial_conn.is_open:
-            try:
-                daten = self.serial_conn.readline().decode('utf-8').strip()
-                return daten
-            except Exception as e:
-                print(f"Fehler beim lesen der Daten: {e}")
-                return None
-        
-        else:
-            print("Serielle Verbindung nicht geöffnet.")
-            return None
-        
+class Read-Sensoren:
+    def temperaturSensor()
+        bus = SMBus(1)  # Use 1 for Raspberry Pi 4 I2C bus
+        sensor = BME280(i2c_dev=bus)
     
-class Sensoren:
-    def__init__(self, Temperatur, Luftfeuchtigkeit, Luftdruck, Tag-Nacht-Zeit)
-    self.Temperatur = Temperatur
-    self.Luftfeuchtigkeit = Luftfeuchtigkeit
-    self.Luftdruck = Luftdruck
-    self.Tag-Nacht-Zeit = Tag-Nacht-Zeit
+        temperature = sensor.get_temperature()
+        pressure = sensor.get_pressure()
+        humidity = sensor.get_humidity()
 
-    def info(self)
-        return f"{self.Temperatur}{ self.Luftfeuchtigkeit}{self.Luftdruck}{ self.Tag-Nacht-Zeit}"
-    
+        return temperature,,pressure, humidity
 
-main 
-
-
+    def airSensor():
+        arduino = serial.Serial("COM6", 9600, timeout=1)
+        time.sleep(2)  # Wait for connection 
+        try:
+            data = arduino.readline().decode().strip()  # Read line
+            if data:
+                try:
+                    sensor_data = json.loads(data)  # Parse JSON
+                    LDR_DATA = sensor_data['LDR_RAW']
+                except json.JSONDecodeError:
+                    print("Invalid JSON received:", data)
+        except KeyboardInterrupt:
+            print("Exiting...")
 
