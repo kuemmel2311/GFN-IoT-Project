@@ -8,13 +8,13 @@ api_key = "d2f8a9c4-3b6e-4f91-a2f7-8e5d1b4a6c3e"
 
 # Headers with API key authentication
 headers = {
-    "x-api-key": api_key,
+    "APIKey": api_key,
     "Content-Type": "application/json"
 }
 
 # Sample data to send
 data = {
-    "dataValue": 25.5,
+    "dataValue": 23.5,
 }
 
 # Send POST request
