@@ -1,44 +1,37 @@
-import serial 
+import time
+from smbus import SMBus
+from bme280 import BME280 
+import serial
+import json
 
-class Sensor_Luftqualität:
-    def__init__(self, port, baudrate=9600,) 
+class Read_Sensoren:
+    def temperaturSensor():
+        bus = SMBus(1)  # Use 1 for Raspberry Pi 4 I2C bus
+        sensor = BME280(i2c_dev=bus)
+        try:   
+            temperature = sensor.get_temperature()
+            pressure = sensor.get_pressure()
+            humidity = sensor.get_humidity()
+        except:
+            print("Error")
+        return temperature, pressure, humidity
 
-    self.port = port
-    self.baudrate = baudrate 
-
-    try:
-        self.serial_conn = serial.Serial(port, baudrate)
-        print(f"Verbindung zu {port} hergestellt.")
-
-    except Exception as e :
-        print(f"Fehler beim Verbindung mit {port}: {e}")
-
-    def lese_daten(self):
-        if self.serial_conn.is_open:
-            try:
-                daten = self.serial_conn.readline().decode('utf-8').strip()
-                return daten
-            except Exception as e:
-                print(f"Fehler beim lesen der Daten: {e}")
-                return None
-        
-        else:
-            print("Serielle Verbindung nicht geöffnet.")
-            return None
-        
-    
-class Sensoren:
-    def__init__(self, Temperatur, Luftfeuchtigkeit, Luftdruck, Tag-Nacht-Zeit)
-    self.Temperatur = Temperatur
-    self.Luftfeuchtigkeit = Luftfeuchtigkeit
-    self.Luftdruck = Luftdruck
-    self.Tag-Nacht-Zeit = Tag-Nacht-Zeit
-
-    def info(self)
-        return f"{self.Temperatur}{ self.Luftfeuchtigkeit}{self.Luftdruck}{ self.Tag-Nacht-Zeit}"
-    
-
-main 
-
+    def airSensor():
+        arduino = serial.Serial("COM6", 9600, timeout=1)
+        time.sleep(2)  # Wait for connection 
+        try:
+            data = arduino.readline().decode().strip()  # Read line
+            if data:
+                try:
+                    sensor_data = json.loads(data)  # Parse JSON
+                    LDR_DATA = sensor_data['LDR_RAW']
+                    MQ135_RAW = sensor_data['MQ135_RAW']
+                    MQ135_R0 = sensor_data['MQ135_R0']
+                    MQ135_PPM = sensor_data['MQ135_PPM']
+                except json.JSONDecodeError:
+                    print("Invalid JSON received:", data)
+        except KeyboardInterrupt:
+            print("Exiting...")
+        return LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM
 
 
