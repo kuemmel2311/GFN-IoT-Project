@@ -1,61 +1,50 @@
 ﻿namespace GFN_IoT_Project.Extensions
 {
-    using System.Linq.Expressions;
+    using System;
     using System.Net;
     using System.Net.Mail;
-    using System.Reflection.Metadata.Ecma335;
-
-    public class EmailClient {
-        public void SendEmail(string from, string to, string subject, string body)
-        {
-            MailMessage mail = new MailMessage(from, to);
-            mail.Subject = subject;
-            mail.Body = body;
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
-            smtp.Credentials = new NetworkCredential("ypor-email", "your-password");
-            smtp.EnableSsl = true;
-            smtp.Send(mail);
-        }
+    public class EmailClient 
+    {
+        private readonly string _smtpServer = "smtp.gmail.com";
+        private readonly int _port = 587; // TLS-port für Gmail
+        private readonly string _emailUsername = Environment.GetEnvironmentVariable("EMAIL_USER")
+            ?? throw new ArgumentNullException(nameof(_emailUsername), "Die Umgebungsvariable 'EMAIL_USER' ist nicht gesetzt.");
+        private readonly string _emailPassword = Environment.GetEnvironmentVariable("EMAIL_pass")
+            ?? throw new ArgumentNullException(nameof(_emailPassword), "Die Umgebungsvariable 'EMAIL_PASS' ist nicht gesetzt.");
 
 
 
-        public void Connect(string server, string username, string password)
+        public void SendEmial(string from, string to, string subject, string body) 
         {
             try
             {
-                if (_isConnected)
+                using (MailMessage mail = new MailMessage())
                 {
-                    return;
-                }
-                if (!UseSSL)
-                {
-                    connect(server, PortNumber);
-                    string response = response();
-                    if (response.Trim().StartsWith("+OK"))
-                    {
-                        //TODO: Raise Error  Event
-                    }
-                    else
-                    {
-                        ExecuteCommand("User", username);
-                        ExecuteCommand("Pass", password);
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(to);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = false; // Falls HTM erlaubt ist, auf true setzen
 
+                    using (SmtpClient smtp = new SmtpClient(_smtpServer, _port))
+                    {
+                        smtp.Credentials = new NetworkCredential(_emailUsername, _emailPassword);
+                        smtp.EnableSsl = true;
+                        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtp.Send(mail);
                     }
-                    _isConnected = true;
-                }
-                else
-                {
-                    //SSL-Verbindung mit Authentifizierung
+
                 }
             }
-
-
-            Catch (Exception ex)
+            catch (Exception ex)
             {
-                //TODO: Raise Error Event
-            }
+                Console.WriteLine($"Fehler beim Senden der E-Mail: {ex.Message}");
 
+            }
         }
+
+
+
     }
 
 }
