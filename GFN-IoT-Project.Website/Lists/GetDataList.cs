@@ -7,8 +7,8 @@ namespace GFN_IoT_Project.Lists
         public class TemperatureData
         {
             public int Id { get; set; }
-            public DateTime Timestamp { get; set; }
-            public double Temperature { get; set; }
+            public DateTime? Timestamp { get; set; }
+            public double? Temperature { get; set; }
         }
 
         public class HumidityData

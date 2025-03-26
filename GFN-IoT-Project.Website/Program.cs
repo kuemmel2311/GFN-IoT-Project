@@ -22,7 +22,7 @@ namespace GFN_IoT_Project
             // add MudBlazor services
             builder.Services.AddMudServices();
             //add custom classes
-            builder.Services.AddSingleton<GetDataList>();
+            builder.Services.AddSingleton<GetDataList.TemperatureData>();
             builder.Services.AddSingleton<GFNLogger>();
             builder.Services.AddSingleton<DatabaseManager>();
             builder.Services.AddSingleton<SqlQueryManager>();

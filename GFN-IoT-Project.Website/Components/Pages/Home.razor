@@ -80,10 +80,22 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Temperatur Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@temperatureSeries" Width="100%" Height="100%">
-                                <CustomGraphics>
-                                </CustomGraphics>
-                            </MudChart>
+                          @if (temperatureSeries != null && temperatureSeries.Count > 0 && temperatureAxisLabels?.Length > 0)
+                            {
+                                <MudChart ChartType="ChartType.Line"
+                                ChartSeries="@temperatureSeries"
+                                XAxisLabels="@temperatureAxisLabels"
+                                ChartOptions="@chartOptions"
+                                Width="100%"
+                                Height="350px"
+                                >
+                                    
+                                </MudChart>
+                            }
+                            else
+                            {
+                                <MudAlert Severity="Severity.Warning">No temperature data available</MudAlert>
+                            }
                         </MudCardContent>
                     </MudCard>
                 </MudItem>
@@ -126,7 +138,7 @@
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
-                        </MudCardContent> 
+                        </MudCardContent>
                     </MudCard>
                 </MudItem>
             </MudGrid>
@@ -134,9 +146,17 @@
     </MudGrid>
 </MudContainer>
 @code {
+
     Timer? _timerLive;
     Timer? _TimerCharts;
     // Current values
+    private ChartOptions chartOptions = new ChartOptions
+    {
+            LineStrokeWidth = 5,
+            ShowLegend = true,
+                
+    };
+        
     private double currentTemperature => LiveUpdateService.UpdateTemp;
     private double currentHumidity => LiveUpdateService.UpdateHumidity;
     private int currentPressure => LiveUpdateService.UpdatePressure;
@@ -145,10 +165,11 @@
     private DateTime currentDateTime { get; set; } = DateTime.Now;
 
     private List<ChartSeries> temperatureSeries = new();
-    private List<ChartSeries> humiditySeries = new ();
-    private List<ChartSeries> pressureSeries = new ();
+    private string[]? temperatureAxisLabels;
+    private List<ChartSeries> humiditySeries = new();
+    private List<ChartSeries> pressureSeries = new();
     private List<ChartSeries> airQualitySeries = new();
-    private async void UpdateDateTime(object state)
+    private void UpdateDateTime(object state)
     {
         currentDateTime = DateTime.Now;
         InvokeAsync(StateHasChanged);
@@ -156,58 +177,68 @@
     }
     private async void UpdateCharts(object state)
     {
-        var twentyFourHoursAgo = currentDateTime.AddHours(-24);
-        // Get the last 24 hours of data
-        var temperatureData = await DbManager.LoadDataList<GetDataList.TemperatureData, dynamic>(SQL.GET_TEMPERATURE_DATA, new
-        {
-            NowTime = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
-            StartTime = twentyFourHoursAgo.ToString("yyyy-MM-dd HH:mm:ss"),
-        });
-        var humidityData = await DbManager.LoadDataType<double[], dynamic>(SQL.GET_TEMPERATURE_DATA, new
-        {
-            StartTime = currentDateTime,
-            NowTime = twentyFourHoursAgo,
-        });
-        var pressureData = await DbManager.LoadDataType<double[], dynamic>(SQL.GET_TEMPERATURE_DATA, new
-        {
-            StartTime = currentDateTime,
-            NowTime = twentyFourHoursAgo,
-        });
-        var airQualityData = await DbManager.LoadDataType<double[], dynamic>(SQL.GET_TEMPERATURE_DATA, new
-        {
-            StartTime = currentDateTime,
-            NowTime = twentyFourHoursAgo,
-        });
-        // Clear the series
-        temperatureSeries.Clear();
-        humiditySeries.Clear();
-        pressureSeries.Clear();
-        airQualitySeries.Clear();
-
-        // Extract data for MudChart
-        string[] Labels => temperatureData.Select(t => t.Timestamp.ToString("HH:mm")).ToArray();
-   
-        
-
-        // Add the data to the series
-
-         temperatureSeries.Add(new ChartSeries { Name = "Temperature", Data = temperatureData });
-        // humiditySeries.Add(new ChartSeries { Name = "Humidity", Data = humidityData });
-        // pressureSeries.Add(new ChartSeries { Name = "Pressure", Data = pressureData });
-        // airQualitySeries.Add(new ChartSeries { Name = "Air Quality", Data = airQualityData });
-        // Force UI update
+        await UpdateChartsAsync();
     }
-    protected override void OnInitialized()
+    private async Task LoadTemperatureDataChartAsync()
     {
-        UpdateCharts(null!);
+        try
+        {
+            var currentDateTime = DateTime.Now;
+            var twentyFourHoursAgo = currentDateTime.AddHours(-24);
+
+            var temperatureData = await DbManager.LoadDataList<GetDataList.TemperatureData, dynamic>(
+                SQL.GET_TEMPERATURE_DATA,
+                new
+                {
+                    NowTime = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                    StartTime = twentyFourHoursAgo.ToString("yyyy-MM-dd HH:mm:ss"),
+                }
+            );
+
+            if (temperatureData == null || !temperatureData.Any())
+            {
+                temperatureSeries = new List<ChartSeries>();
+                temperatureAxisLabels = Array.Empty<string>();
+                return;
+            }
+            temperatureAxisLabels = temperatureData
+                .Select(t => t.Timestamp?.ToString("HH:mm") ?? "Unknown")
+                .ToArray();
+
+            temperatureSeries = new List<ChartSeries>
+            {
+                new ChartSeries
+                {
+                
+                    Name = "Temperature",
+                    Data = temperatureData
+                        .Select(t => t.Temperature ?? 0.0)
+                        .ToArray(),             
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            GFNLogger.Log($"Error in LoadTemperatureDataAsync: {ex}");
+            throw;
+        }
+    }
+    private async Task UpdateChartsAsync()
+    {
+        await LoadTemperatureDataChartAsync();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateChartsAsync();
         _TimerCharts = new Timer(UpdateCharts!, null, 0, 60000); // Update every minute
         _timerLive = new Timer(UpdateDateTime!, null, 0, 1000); // Update every second
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender){
-       
-        }  
+        if (firstRender)
+        {
+
+        }
     }
     public void Dispose()
     {
@@ -225,7 +256,8 @@
         // Force UI update
         InvokeAsync(StateHasChanged);
     }
-    private string GetDayNightIcon(int value){
+    private string GetDayNightIcon(int value)
+    {
         //very dark (Night, moonloight)
         if (value > 0 && value < 50)
         {
@@ -241,13 +273,12 @@
         {
             return Icons.Material.Filled.Cloud;
         }
-        //Bright Light (Sunny day) burn! 
+        //Bright Light (Sunny day) burn!
         else
         {
             return Icons.Material.Filled.WbSunny;
         }
     }
-
     // Helper methods for color coding
     private Color GetTemperatureColor(double temp)
     {
@@ -255,28 +286,23 @@
         if (temp < 20 || temp > 25) return Color.Warning;
         return Color.Success;
     }
-
     private Color GetHumidityColor(double humidity)
     {
         if (humidity < 30 || humidity > 70) return Color.Error;
         if (humidity < 40 || humidity > 60) return Color.Warning;
         return Color.Success;
     }
-
     private Color GetPressureColor(int pressure)
     {
         if (pressure < 1000 || pressure > 1025) return Color.Warning;
         return Color.Default;
     }
-
     private Color GetAirQualityColor(double aqi)
     {
         if (aqi > 75) return Color.Error;
         if (aqi > 50) return Color.Warning;
         return Color.Success;
     }
-
-
     // Danger checks
     private bool IsTemperatureDangerous(double temp)
     {
