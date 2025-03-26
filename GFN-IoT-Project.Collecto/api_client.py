@@ -1,21 +1,18 @@
 
 import requests     # Zur Kommunikation mit der API
-import json         # JavaScript Object Notation --> für Datenaustausch
-import datetime     # Format fuer Datum & Zeit
 import config
 
 
 class API_Request:
 
     def Feuchtigkeit(data):
-        url = "UNSERE_API_URL"                                  # API Adresse einfuegen
         data = {"dataValue": 0}                                 # Sensordaten die gesendet werden sollen --> Feuchtigkeit
 
-        headers = {"x-api-key": "{auth_token}",                 # Authentifizierung nötig zur Eingabe von Daten
+        headers = {"APIKey": config.auth_token,              # Authentifizierung nötig zur Eingabe von Daten
                    "Content-Type": "application/json"
     }
         
-        response = requests.post("UNSERE_API_URL", json=data,)  # Befehl zum Senden an die API
+        response = requests.post(config.URL.web, json=data, headers=headers)  # Befehl zum Senden an die API
         if response.status_code == 200:                         # Bei Code 200 war Übertragung erfolgreich
             print("Übertragung erfolgreich!")
             print(response.json())
@@ -26,14 +23,13 @@ class API_Request:
 
 
     def Luftdruck(data):
-        url = "UNSERE_API_URL"                                  # API Adresse einfuegen
         data ={"dataValue": 0}                                  # Sensordaten die gesendet werden sollen -->  Luftdruck
         
-        headers = {"x-api-key": "{auth_token}",                 # Authentifizierung nötig zur Eingabe von Daten
+        headers = {"APIKey": config.auth_token,                 # Authentifizierung nötig zur Eingabe von Daten
                    "Content-Type": "application/json"
     }
         
-        response = requests.post("UNSERE_API_URL", json=data,)  # Befehl zum Senden an die API
+        response = requests.post(config.URL.web, json=data, headers=headers)  # Befehl zum Senden an die API
         if response.status_code == 200:                         # Bei Code 200 war Übertragung erfolgreich
             print("Übertragung erfolgreich!")
             print(response.json())
@@ -43,14 +39,13 @@ class API_Request:
             print("Keine Verbindung zum Server!")               # Bei anderen Codes, gibt es Serverprobleme
 
     def Temperatur(data):
-        url = "UNSERE_API_URL"                                  # API Adresse einfuegen
         data = {"dataValue": 0}                                 # Sensordaten die gesendet werden sollen --> Temperatur
 
-        headers = {"x-api-key": "{auth_token}",                 # Authentifizierung nötig zur Eingabe von Daten
+        headers = {"APIKey": config.auth_token,                 # Authentifizierung nötig zur Eingabe von Daten
                    "Content-Type": "application/json"
     }
         
-        response = requests.post("UNSERE_API_URL", json=data,)  # Befehl zum Senden an die API
+        response = requests.post(config.URL.web, json=data, headers=headers)  # Befehl zum Senden an die API
         if response.status_code == 200:                         # Bei Code 200 war Übertragung erfolgreich
             print("Übertragung erfolgreich!")
             print(response.json())
@@ -60,14 +55,13 @@ class API_Request:
             print("Keine Verbindung zum Server!")               # Bei anderen Codes, gibt es Serverprobleme
 
     def Luftqualitaet(data):
-        url = "UNSERE_API_URL"                                  # API Adresse einfuegen
-        data = {"dateValue": 0}                                 # Sensordaten die gesendet werden sollen --> Luftqualitaet
+        data = {"dataValue": 0}                                 # Sensordaten die gesendet werden sollen --> Luftqualitaet
 
-        headers = {"x-api-key": "{auth_token}",                 # Authentifizierung nötig zur Eingabe von Daten
+        headers = {"APIKey": config.auth_token,                 # Authentifizierung nötig zur Eingabe von Daten
                    "Content-Type": "application/json"
     }
         
-        response = requests.post("UNSERE_API_URL", json=data,)  # Befehl zum Senden an die API
+        response = requests.post(config.URL.web, json=data, headers=headers)  # Befehl zum Senden an die API
         if response.status_code == 200:                         # Bei Code 200 war Übertragung erfolgreich
             print("Übertragung erfolgreich!")
             print(response.json())
@@ -78,15 +72,13 @@ class API_Request:
 
 
     def Lichtsensor(data):
+        data = {"dataValue": 0}                                 # Sensordaten die gesendet werden sollen --> Tag oder Nacht
 
-        url = "UNSERE_API_URL"                                  # API Adresse einfuegen
-        data = {"dateValue": 0}                                 # Sensordaten die gesendet werden sollen --> Tag oder Nacht
-
-        headers = {"x-api-key": "{auth_token}",                 # Authentifizierung nötig zur Eingabe von Daten
+        headers = {"APIKey": config.auth_token,                 # Authentifizierung nötig zur Eingabe von Daten
                    "Content-Type": "application/json"
     }
         
-        response = requests.post("UNSERE_API_URL", json=data,)  # Befehl zum Senden an die API
+        response = requests.post(config.URL.web, json=data, headers=headers)  # Befehl zum Senden an die API
         if response.status_code == 200:                         # Bei Code 200 war Übertragung erfolgreich
             print("Übertragung erfolgreich!")
             print(response.json())
