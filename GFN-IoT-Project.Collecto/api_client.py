@@ -18,7 +18,7 @@ class API_Request:
             print(f"Statuscode: {code}")    
 
 
-    def Humidity(data):
+    def send_humidity(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Feuchtigkeit
@@ -33,7 +33,7 @@ class API_Request:
             API_Request.Statuscode(e.response.status_code)
 
 
-    def Pressure(data):
+    def send_pressure(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen -->  Luftdruck
@@ -47,7 +47,7 @@ class API_Request:
         except requests.exceptions.RequestException as e:
             API_Request.Statuscode(e.response.status_code)
 
-    def Temp(data):
+    def send_temp(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Temperatur
@@ -61,7 +61,7 @@ class API_Request:
         except requests.exceptions.RequestException as e:
             API_Request.Statuscode(e.response.status_code)
 
-    def AirQuality(data):
+    def send_airquality(data):
         try:
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Luftqualitaet
 
@@ -75,7 +75,7 @@ class API_Request:
             API_Request.Statuscode(e.response.status_code)
 
 
-    def DayNight(data):
+    def send_daynight(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Tag oder Nacht
