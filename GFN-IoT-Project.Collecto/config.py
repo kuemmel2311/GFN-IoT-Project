@@ -10,5 +10,5 @@ class Client:
         SEND_AIRQUALITY_DATA = f"{API_SEND_DATA.API_WEB_ADRESS}WeatherStationAPI/SendAirQualityData"
         SEND_DAYNIGHT_DATA = f"{API_SEND_DATA.API_WEB_ADRESS}WeatherStationAPI/SendDayNightData"
 
-class Raspberry :
-      Port = '/dev/ttyACM0'         
+class Sensor :
+      ArduinoPort = '/dev/ttyACM0'         
