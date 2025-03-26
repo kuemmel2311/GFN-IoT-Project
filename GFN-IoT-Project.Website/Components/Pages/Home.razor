@@ -1,6 +1,8 @@
 ﻿@page "/"
 @inject ISnackbar Snackbar
 @inject Extensions.LiveUpdateService LiveUpdateService
+@inject Extensions.Database.DatabaseManager DbManager
+@inject Extensions.Database.SqlQueryManager SQL
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4 d-flex flex-column align-center">
     <!-- Top Row Cards -->
@@ -61,7 +63,7 @@
                         <MudText Typo="Typo.subtitle1" Class="ml-2 text-center">Wetterstatus</MudText>
                         <MudIcon Size="Size.Medium" Icon="@GetDayNightIcon(dayTimeStatus)" Color="Color.Primary" Class="ml-auto" />
                     </div>
-                    <MudText Typo="Typo.h6" Class="text-center">@currentDateTime</MudText>
+                    <MudText Typo="Typo.h6" Class="text-center">@currentDateTime.ToString("HH:mm:ss")</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -78,7 +80,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Temperatur Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@temperatureSeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@temperatureSeries" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -92,7 +94,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Luftfeuchtigkeit Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@humiditySeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@humiditySeries" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -106,7 +108,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Luftdruck Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@pressureSeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@pressureSeries" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -120,7 +122,7 @@
                             <MudText Typo="Typo.h6" Class="mx-auto">Luftqualität Chart</MudText>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudChart ChartType="ChartType.Line" ChartSeries="@airQualitySeries" XAxisLabels="@hourLabels" Width="100%" Height="100%">
+                            <MudChart ChartType="ChartType.Line" ChartSeries="@airQualitySeries" Width="100%" Height="100%">
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
@@ -132,53 +134,92 @@
     </MudGrid>
 </MudContainer>
 @code {
-    Timer? _timer;
+    Timer? _timerLive;
+    Timer? _TimerCharts;
     // Current values
     private double currentTemperature => LiveUpdateService.UpdateTemp;
     private double currentHumidity => LiveUpdateService.UpdateHumidity;
     private int currentPressure => LiveUpdateService.UpdatePressure;
     private double currentAirQuality => LiveUpdateService.UpdateAirQuality;
     private int dayTimeStatus => LiveUpdateService.UpdateDayNight;
-    private string currentDateTime { get; set; } = DateTime.Now.ToString("HH:mm:ss");
+    private DateTime currentDateTime { get; set; } = DateTime.Now;
 
-    // Chart data
-    private string[] hourLabels = new string[]
+    private List<ChartSeries> temperatureSeries = new();
+    private List<ChartSeries> humiditySeries = new ();
+    private List<ChartSeries> pressureSeries = new ();
+    private List<ChartSeries> airQualitySeries = new();
+    private async void UpdateDateTime(object state)
     {
-    "00:00", "01:00", "02:00", "03:00", "04:00",
-    "05:00", "06:00", "07:00", "08:00", "09:00",
-    "10:00", "11:00", "12:00", "13:00", "14:00",
-    "15:00", "16:00", "17:00", "18:00", "19:00",
-    "20:00", "21:00", "22:00", "23:00"
-    };
-    private List<ChartSeries> temperatureSeries = new List<ChartSeries>();
-    private List<ChartSeries> humiditySeries = new List<ChartSeries>();
-    private List<ChartSeries> pressureSeries = new List<ChartSeries>();
-    private List<ChartSeries> airQualitySeries = new List<ChartSeries>();
-    private void UpdateDateTime(object state)
-    {
-        currentDateTime = DateTime.Now.ToString("HH:mm:ss");
+        currentDateTime = DateTime.Now;
         InvokeAsync(StateHasChanged);
+
+    }
+    private async void UpdateCharts(object state)
+    {
+        var twentyFourHoursAgo = currentDateTime.AddHours(-24);
+        // Get the last 24 hours of data
+        var temperatureData = await DbManager.LoadDataList<GetDataList.TemperatureData, dynamic>(SQL.GET_TEMPERATURE_DATA, new
+        {
+            NowTime = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            StartTime = twentyFourHoursAgo.ToString("yyyy-MM-dd HH:mm:ss"),
+        });
+        var humidityData = await DbManager.LoadDataType<double[], dynamic>(SQL.GET_TEMPERATURE_DATA, new
+        {
+            StartTime = currentDateTime,
+            NowTime = twentyFourHoursAgo,
+        });
+        var pressureData = await DbManager.LoadDataType<double[], dynamic>(SQL.GET_TEMPERATURE_DATA, new
+        {
+            StartTime = currentDateTime,
+            NowTime = twentyFourHoursAgo,
+        });
+        var airQualityData = await DbManager.LoadDataType<double[], dynamic>(SQL.GET_TEMPERATURE_DATA, new
+        {
+            StartTime = currentDateTime,
+            NowTime = twentyFourHoursAgo,
+        });
+        // Clear the series
+        temperatureSeries.Clear();
+        humiditySeries.Clear();
+        pressureSeries.Clear();
+        airQualitySeries.Clear();
+
+        // Extract data for MudChart
+        string[] Labels => temperatureData.Select(t => t.Timestamp.ToString("HH:mm")).ToArray();
+   
+        
+
+        // Add the data to the series
+
+         temperatureSeries.Add(new ChartSeries { Name = "Temperature", Data = temperatureData });
+        // humiditySeries.Add(new ChartSeries { Name = "Humidity", Data = humidityData });
+        // pressureSeries.Add(new ChartSeries { Name = "Pressure", Data = pressureData });
+        // airQualitySeries.Add(new ChartSeries { Name = "Air Quality", Data = airQualityData });
+        // Force UI update
     }
     protected override void OnInitialized()
     {
-        _timer = new Timer(UpdateDateTime!, null, 0, 1000); // Update every second
+        UpdateCharts(null!);
+        _TimerCharts = new Timer(UpdateCharts!, null, 0, 60000); // Update every minute
+        _timerLive = new Timer(UpdateDateTime!, null, 0, 1000); // Update every second
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if(firstRender){
-
+       
         }  
     }
     public void Dispose()
     {
-        _timer?.Dispose();
+        _TimerCharts?.Dispose();
+        _timerLive?.Dispose();
     }
     private void UpdateData()
     {
         // Check if any values are in danger zone and show notification
         if (IsTemperatureDangerous(currentTemperature) ||
-            IsHumidityDangerous((int)currentHumidity) ||
-            IsAirQualityDangerous((int)currentAirQuality))
+            IsHumidityDangerous(currentHumidity) ||
+            IsAirQualityDangerous(currentAirQuality))
         { }
 
         // Force UI update
@@ -242,12 +283,12 @@
         return temp < 15 || temp > 35;
     }
 
-    private bool IsHumidityDangerous(int humidity)
+    private bool IsHumidityDangerous(double humidity)
     {
         return humidity < 20 || humidity > 80;
     }
 
-    private bool IsAirQualityDangerous(int aqi)
+    private bool IsAirQualityDangerous(double aqi)
     {
         return aqi > 75;
     }
