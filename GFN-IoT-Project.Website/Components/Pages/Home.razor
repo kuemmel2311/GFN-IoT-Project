@@ -58,7 +58,7 @@
                 <MudCardContent Class="d-flex flex-column justify-center text-wrap text-break">
                     <div class="d-flex align-items-center">
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Brightness6" Color="Color.Primary" />
-                        <MudText Typo="Typo.subtitle1" Class="ml-2 text-center">Tag-Nacht Zeit</MudText>
+                        <MudText Typo="Typo.subtitle1" Class="ml-2 text-center">Wetterstatus</MudText>
                         <MudIcon Size="Size.Medium" Icon="@GetDayNightIcon(dayTimeStatus)" Color="Color.Primary" Class="ml-auto" />
                     </div>
                     <MudText Typo="Typo.h6" Class="text-center">@currentDateTime</MudText>
@@ -124,7 +124,7 @@
                                 <CustomGraphics>
                                 </CustomGraphics>
                             </MudChart>
-                        </MudCardContent>
+                        </MudCardContent> 
                     </MudCard>
                 </MudItem>
             </MudGrid>
@@ -132,13 +132,14 @@
     </MudGrid>
 </MudContainer>
 @code {
+    Timer? _timer;
     // Current values
     private double currentTemperature => LiveUpdateService.UpdateTemp;
-    private int currentHumidity { get; set; } = 45;
-    private int currentPressure { get; set; } = 1013;
-    private int currentAirQuality { get; set; } = 35;
-    private int dayTimeStatus { get; set; } = 800;
-    private string currentDateTime { get; set; } = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy");
+    private double currentHumidity => LiveUpdateService.UpdateHumidity;
+    private int currentPressure => LiveUpdateService.UpdatePressure;
+    private double currentAirQuality => LiveUpdateService.UpdateAirQuality;
+    private int dayTimeStatus => LiveUpdateService.UpdateDayNight;
+    private string currentDateTime { get; set; } = DateTime.Now.ToString("HH:mm:ss");
 
     // Chart data
     private string[] hourLabels = new string[]
@@ -153,25 +154,31 @@
     private List<ChartSeries> humiditySeries = new List<ChartSeries>();
     private List<ChartSeries> pressureSeries = new List<ChartSeries>();
     private List<ChartSeries> airQualitySeries = new List<ChartSeries>();
-
+    private void UpdateDateTime(object state)
+    {
+        currentDateTime = DateTime.Now.ToString("HH:mm:ss");
+        InvokeAsync(StateHasChanged);
+    }
     protected override void OnInitialized()
     {
-        
+        _timer = new Timer(UpdateDateTime!, null, 0, 1000); // Update every second
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if(firstRender){
 
-        }
-        currentDateTime = DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy"); StateHasChanged();
+        }  
     }
-
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
     private void UpdateData()
     {
         // Check if any values are in danger zone and show notification
         if (IsTemperatureDangerous(currentTemperature) ||
-            IsHumidityDangerous(currentHumidity) ||
-            IsAirQualityDangerous(currentAirQuality))
+            IsHumidityDangerous((int)currentHumidity) ||
+            IsAirQualityDangerous((int)currentAirQuality))
         { }
 
         // Force UI update
@@ -198,7 +205,6 @@
         {
             return Icons.Material.Filled.WbSunny;
         }
-
     }
 
     // Helper methods for color coding
@@ -209,7 +215,7 @@
         return Color.Success;
     }
 
-    private Color GetHumidityColor(int humidity)
+    private Color GetHumidityColor(double humidity)
     {
         if (humidity < 30 || humidity > 70) return Color.Error;
         if (humidity < 40 || humidity > 60) return Color.Warning;
@@ -222,7 +228,7 @@
         return Color.Default;
     }
 
-    private Color GetAirQualityColor(int aqi)
+    private Color GetAirQualityColor(double aqi)
     {
         if (aqi > 75) return Color.Error;
         if (aqi > 50) return Color.Warning;

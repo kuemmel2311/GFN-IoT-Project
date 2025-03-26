@@ -1,4 +1,5 @@
 pyserial
-smbus
-RPi.bme280 
+smbus2
+requests
+pimoroni-bme280
 smbus2

@@ -9,3 +9,6 @@ class Client:
         SEND_PRESSURE_DATA = f"{API_SEND_DATA.API_WEB_ADRESS}WeatherStationAPI/SendPressureData"
         SEND_AIRQUALITY_DATA = f"{API_SEND_DATA.API_WEB_ADRESS}WeatherStationAPI/SendAirQualityData"
         SEND_DAYNIGHT_DATA = f"{API_SEND_DATA.API_WEB_ADRESS}WeatherStationAPI/SendDayNightData"
+
+class Sensor :
+      ArduinoPort = '/dev/ttyACM0'         

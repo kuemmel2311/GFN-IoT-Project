@@ -1,11 +1,13 @@
+import serial
+import json
 import time
 from smbus import SMBus
 from bme280 import BME280 
-import serial
-import json
+from  config import Sensor
 
-class Read_Sensoren:
-    def temperaturSensor():
+class Sensor_Read:
+
+    def ReadTempSensor():
         bus = SMBus(1)  # Use 1 for Raspberry Pi 4 I2C bus
         sensor = BME280(i2c_dev=bus)
         try:   
@@ -16,8 +18,8 @@ class Read_Sensoren:
             print("Error")
         return temperature, pressure, humidity
 
-    def airSensor():
-        arduino = serial.Serial("COM6", 9600, timeout=1)
+    def ReadAirSenor():
+        arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)
         time.sleep(2)  # Wait for connection 
         try:
             data = arduino.readline().decode().strip()  # Read line
