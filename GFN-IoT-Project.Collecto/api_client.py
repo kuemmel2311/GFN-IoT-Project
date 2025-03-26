@@ -1,6 +1,6 @@
 
 import requests     # Zur Kommunikation mit der API
-import config
+import config       # Einfuegen der config-Datei
 
 
 class API_Request:
@@ -18,7 +18,7 @@ class API_Request:
             print(f"Statuscode: {code}")    
 
 
-    def Feuchtigkeit(data):
+    def Humidity(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Feuchtigkeit
@@ -33,7 +33,7 @@ class API_Request:
             API_Request.Statuscode(e.response.status_code)
 
 
-    def Luftdruck(data):
+    def Pressure(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen -->  Luftdruck
@@ -47,7 +47,7 @@ class API_Request:
         except requests.exceptions.RequestException as e:
             API_Request.Statuscode(e.response.status_code)
 
-    def Temperatur(data):
+    def Temp(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Temperatur
@@ -61,7 +61,7 @@ class API_Request:
         except requests.exceptions.RequestException as e:
             API_Request.Statuscode(e.response.status_code)
 
-    def Luftqualitaet(data):
+    def AirQuality(data):
         try:
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Luftqualitaet
 
@@ -75,7 +75,7 @@ class API_Request:
             API_Request.Statuscode(e.response.status_code)
 
 
-    def Lichtsensor(data):
+    def DayNight(data):
         try:
 
             dataValue = {"dataValue": data}                                                             # Sensordaten die gesendet werden sollen --> Tag oder Nacht
