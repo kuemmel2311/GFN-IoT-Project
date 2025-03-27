@@ -52,9 +52,7 @@ def main_loop() -> None:
     try:
         while True:
             data_measurement()
-            time.sleep(1)
     except Exception as e:
         print(f"Übertragung Fehlgeschlagen! Fehler: {e}")
-# Run initial measurement
-if __name__ == "__main__":
-    data_measurement()
+
+data_measurement()
