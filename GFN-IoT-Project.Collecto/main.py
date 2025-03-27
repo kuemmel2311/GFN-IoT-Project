@@ -25,6 +25,11 @@ def data_measurement():
     temp, pres, humi = Sensor_Read.ReadTempSensor()
     LDR_DATA, _, _, MQ135_PPM = Sensor_Read.ReadAirSensor()  
 
+    # Check if any sensor data is None
+    if temp is None or pres is None or humi is None or LDR_DATA is None or MQ135_PPM is None:
+        print("Error: Sensor data is None. Skipping update.")
+        return
+    
     if last_data['temp'] is None or temp != last_data['temp']:
         API_Request.send_temp(f"{temp:.2f}")
         data_changed = True
