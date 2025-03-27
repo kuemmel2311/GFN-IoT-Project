@@ -3,7 +3,7 @@ import json
 import time
 
 # Set correct COM port (check in Arduino IDE)
-arduino = serial.Serial("COM6", 9600, timeout=1)
+arduino = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
 time.sleep(2)  # Wait for connection
 
 while True:

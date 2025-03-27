@@ -21,8 +21,9 @@ class Sensor_Read:
 
     def ReadAirSensor():
         LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM = None, None, None, None
+        arduino = None
         try:
-            arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)
+            arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)  # Open serial port
             data = arduino.readline().decode().strip()  # Read line
             if data:
                 try:
@@ -35,6 +36,11 @@ class Sensor_Read:
                     print("Invalid JSON received:", data)
         except serial.SerialException as e:
             print(f"Error reading from Arduino: {e}")
+        finally:
+            # Ensure the connection is closed
+            if arduino is not None and arduino.is_open:
+                arduino.close()
         return LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM
+    
 
 
