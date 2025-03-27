@@ -30,7 +30,14 @@ def ReadAirSensor():
 def load_last_data():
     try:
         with open("last_data.json", "r") as file:
-            return json.load(file)   
+            data = json.load(file)
+            return {
+                "humidity": float(data.get("humidity", 0)),
+                "pressure": float(data.get("pressure", 0)),
+                "temp": float(data.get("temp", 0)),
+                "airquality": float(data.get("airquality", 0)),
+                "daynight": int(data.get("daynight", 0))  # LDR data is likely an integer
+            }
     except (FileNotFoundError, json.JSONDecodeError):
         return {"humidity": None, "pressure": None, "temp": None, "airquality": None, "daynight": None}
 
