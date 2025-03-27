@@ -30,14 +30,7 @@ def ReadAirSensor():
 def load_last_data():
     try:
         with open("last_data.json", "r") as file:
-            data = json.load(file)
-            return {
-                "humidity": float(data.get("humidity", 0)),
-                "pressure": float(data.get("pressure", 0)),
-                "temp": float(data.get("temp", 0)),
-                "airquality": float(data.get("airquality", 0)),
-                "daynight": int(data.get("daynight", 0))  # LDR data is likely an integer
-            }
+            return json.load(file)   
     except (FileNotFoundError, json.JSONDecodeError):
         return {"humidity": None, "pressure": None, "temp": None, "airquality": None, "daynight": None}
 
@@ -62,13 +55,18 @@ def data_measurement():
         print(f"Temp {temp}, Pres {pres} humi {humi} LDR {LDR_DATA}, PPM: {MQ135_PPM}")
         return
     
+    if  LDR_DATA != last_data['daynight']:
+        API_Request.send_daynight(LDR_DATA)
+        data_changed = True
+        print("DayNight Updated")
+
     if temp != last_data['temp']:
-        API_Request.send_temp(f"{temp:.2f}")
+        API_Request.send_temp(temp)
         data_changed = True
         print("Temp Updated")
 
     if  pres != last_data['pressure']:
-        API_Request.send_pressure(f"{pres:.2f}")
+        API_Request.send_pressure(pres)
         data_changed= True
         print("Pressure Updated")
 
@@ -78,14 +76,9 @@ def data_measurement():
         print("Humidity Updated")
 
     if  MQ135_PPM != last_data['airquality']:
-        API_Request.send_airquality(f"{MQ135_PPM:.4f}")
+        API_Request.send_airquality(MQ135_PPM)
         data_changed = True
         print("Air Quality Updated")
-
-    if  LDR_DATA != last_data['daynight']:
-        API_Request.send_daynight(LDR_DATA)
-        data_changed = True
-        print("DayNight Updated")
 
     if data_changed:
         save_last_data(humi, pres, temp, MQ135_PPM, LDR_DATA)
