@@ -7,6 +7,7 @@ from  config import Sensor
 
 class Sensor_Read:
 
+    @staticmethod
     def ReadTempSensor():
         bus = SMBus(1)  # Use 1 for Raspberry Pi 4 I2C bus
         sensor = BME280(i2c_dev=bus)
@@ -18,6 +19,7 @@ class Sensor_Read:
             print("Error")
         return temperature, pressure, humidity
 
+    @staticmethod
     def ReadAirSensor():
         LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM = None
         arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)
@@ -35,5 +37,4 @@ class Sensor_Read:
         except KeyboardInterrupt:
             print("Exiting...")
         return LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM
-
 
