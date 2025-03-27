@@ -6,6 +6,7 @@ import time
 from  config import Sensor
 from api_client import API_Request
 from sensor_client import Sensor_Read
+import os
 
 arduino = serial.Serial("/dev/ttyACM0", 9600, timeout=1)  # Open serial port
 time.sleep(2)
@@ -84,6 +85,10 @@ def data_measurement():
         save_last_data(humi, pres, temp, MQ135_PPM, LDR_DATA)
 
 def main_loop():
+    try:
+        os.remove("last_data.json")
+    except:
+        print("")
     try:
         while True:
             data_measurement()
