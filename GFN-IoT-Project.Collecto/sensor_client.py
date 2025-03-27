@@ -24,7 +24,7 @@ class Sensor_Read:
         arduino = None
         try:
             arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)  # Open serial port
-            time.sleep(2) 
+            time.sleep(2)
             data = arduino.readline().decode().strip()  # Read line
             if data:
                 try:

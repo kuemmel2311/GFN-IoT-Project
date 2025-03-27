@@ -7,15 +7,13 @@ from  config import Sensor
 from api_client import API_Request
 from sensor_client import Sensor_Read
 
-arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)  # Open serial port
+arduino = serial.Serial("/dev/ttyACM0", 9600, timeout=1)  # Open serial port
 time.sleep(2)
 
 def ReadAirSensor():
     LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM = None, None, None, None
-    arduino = None
-    try:
-        
-        data = arduino.readline().decode().strip()  # Read line
+    try:     
+        data = arduino.readline().decode().strip() # Read line
         try:
             sensor_data = json.loads(data)  # Parse JSON
             LDR_DATA = sensor_data['LDR_RAW']
@@ -57,27 +55,27 @@ def data_measurement():
         print(f"Temp {temp}, Pres {pres} humi {humi} LDR {LDR_DATA}, PPM: {MQ135_PPM}")
         return
     
-    if last_data['temp'] is None or temp != last_data['temp']:
+    if temp != last_data['temp']:
         API_Request.send_temp(f"{temp:.2f}")
         data_changed = True
         print("Temp Updated")
 
-    if last_data['pressure'] is None or pres != last_data['pressure']:
+    if  pres != last_data['pressure']:
         API_Request.send_pressure(f"{pres:.2f}")
         data_changed= True
         print("Pressure Updated")
 
-    if last_data['humidity'] is None or humi != last_data['humidity']:
+    if  humi != last_data['humidity']:
         API_Request.send_humidity(humi)
         data_changed = True
         print("Humidity Updated")
 
-    if last_data['airquality'] is None or MQ135_PPM != last_data['airquality']:
+    if  MQ135_PPM != last_data['airquality']:
         API_Request.send_airquality(f"{MQ135_PPM:.4f}")
         data_changed = True
         print("Air Quality Updated")
 
-    if last_data['daynight'] is None or LDR_DATA != last_data['daynight']:
+    if  LDR_DATA != last_data['daynight']:
         API_Request.send_daynight(LDR_DATA)
         data_changed = True
         print("DayNight Updated")
