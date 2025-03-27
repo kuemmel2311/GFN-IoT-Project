@@ -1,6 +1,6 @@
 class API_SEND_DATA:
 
-    API_WEB_ADRESS = 'http://10.5.1.246:5000/'
+    API_WEB_ADRESS = 'https://sws.aclab.tech/'
     auth_token = "d2f8a9c4-3b6e-4f91-a2f7-8e5d1b4a6c3e"
 
 class Client:
