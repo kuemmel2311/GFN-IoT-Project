@@ -28,6 +28,9 @@ def data_measurement() -> None:
     temp, pres, humi = Sensor_Read.ReadTempSensor()
     LDR_DATA, _, _, MQ135_PPM = Sensor_Read.ReadAirSenor()
 
+    if None in [temp,pres, humi, MQ135_PPM, LDR_DATA]:
+        return
+    
     updated_values = {
         "temp": (temp, f"{temp:.2f}"),
         "pressure": (pres, f"{pres:.2f}"),
