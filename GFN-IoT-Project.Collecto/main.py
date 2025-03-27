@@ -1,7 +1,33 @@
 import time
 import json
+import serial
+import json
+import time
+from  config import Sensor
 from api_client import API_Request
 from sensor_client import Sensor_Read
+
+arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)  # Open serial port
+time.sleep(2)
+
+def ReadAirSensor():
+    LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM = None, None, None, None
+    arduino = None
+    try:
+        
+        data = arduino.readline().decode().strip()  # Read line
+        try:
+            sensor_data = json.loads(data)  # Parse JSON
+            LDR_DATA = sensor_data['LDR_RAW']
+            MQ135_RAW = sensor_data['MQ135_RAW']
+            MQ135_R0 = sensor_data['MQ135_R0']
+            MQ135_PPM = sensor_data['MQ135_PPM']
+        except json.JSONDecodeError:
+            print("Invalid JSON received:", data)             
+    except serial.SerialException as e:
+            print(f"Error reading from Arduino: {e}")
+    finally:
+        return LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM
 
 def load_last_data():
     try:
@@ -23,7 +49,7 @@ def data_measurement():
     data_changed = False
 
     temp, pres, humi = Sensor_Read.ReadTempSensor()
-    LDR_DATA, _, _, MQ135_PPM = Sensor_Read.re
+    LDR_DATA, _, _, MQ135_PPM = ReadAirSensor()
 
     # Check if any sensor data is None
     if temp is None or pres is None or humi is None or LDR_DATA is None or MQ135_PPM is None:
