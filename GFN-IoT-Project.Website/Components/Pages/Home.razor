@@ -1,4 +1,5 @@
 ﻿@page "/"
+<title>Smart Weather Station</title>
 @inject ISnackbar Snackbar
 @inject Extensions.LiveUpdateService LiveUpdateService
 @inject Extensions.Database.DatabaseManager DbManager
@@ -183,10 +184,10 @@
             LineStrokeWidth = 5,
             ShowLegend = true,
     };
-    private bool TemperatureWarning;
-    private bool HumidityWaring;
-    private bool PressureWaring;
-    private bool AirQualityWaring;
+    private bool TemperatureWarning { get; set; }
+    private bool HumidityWaring { get; set; }
+    private bool PressureWaring { get; set; }
+    private bool AirQualityWaring { get; set; }
 
     private double currentTemperature => LiveUpdateService.UpdateTemp;
     private double currentHumidity => LiveUpdateService.UpdateHumidity;
@@ -203,10 +204,10 @@
     private string[]? pressureAxisLabels;
     private List<ChartSeries> airQualitySeries = new();
     private string[]? airQualityAxisLabels;
-    private void UpdateDateTime(object state)
+    private async void UpdateDateTime(object state)
     {
         currentDateTime = DateTime.Now;
-        InvokeAsync(StateHasChanged);
+       await InvokeAsync(StateHasChanged);
 
     }
     private void UpdateCharts(object state)
@@ -382,7 +383,8 @@
             LoadPressureDataChartAsync(),
             LoadAirQualityDataChartAsync()
         );
-
+        UpdateData();
+       await InvokeAsync(StateHasChanged);
     }
     protected override async Task OnInitializedAsync()
     {
@@ -405,7 +407,7 @@
         }else{
             TemperatureWarning = false;
         }
-        if (IsHumidityDangerous(currentHumidity))
+        if (IsHumidityDangerous(currentHumidity) && HumidityWaring == false)
         {
             await EmailService.SendEmailAsync("Humidity Warning!!", $"Die Luftfeuchtigkeit ist {currentHumidity}");
             HumidityWaring = true;
@@ -413,13 +415,14 @@
         else{
             HumidityWaring = false;
         }
-        if (IsAirQualityDangerous(currentAirQuality))
+        if (IsAirQualityDangerous(currentAirQuality) && AirQualityWaring == false)
         {
             await EmailService.SendEmailAsync("Air Quality Warning!!", $"Die Luftqualität ist {currentAirQuality}");
+            AirQualityWaring = true;
         }else{
             AirQualityWaring = false;
         }
-        if (IsPressureDangerous(currentPressure))
+        if (IsPressureDangerous(currentPressure) && PressureWaring == false)
         {
             await EmailService.SendEmailAsync("Pressure Warning!!", $"Der Luftdruck ist {currentPressure}");
             PressureWaring = true;
@@ -428,7 +431,7 @@
         }
 
         // Force UI update
-        InvokeAsync(StateHasChanged);
+       await InvokeAsync(StateHasChanged);
     }
     private string GetDayNightIcon(int value)
     {
@@ -494,6 +497,6 @@
     }
     private bool IsPressureDangerous(int pressure)
     {
-        return pressure < 1000 || pressure > 1025;
+        return pressure < 990 || pressure > 1025;
     }
 }

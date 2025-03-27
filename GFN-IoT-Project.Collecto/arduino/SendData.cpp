@@ -1,9 +1,7 @@
 #include <ArduinoJson.h>  // Include ArduinoJson library for JSON formatting
-#include "ArduinoLowPower.h" // Include lowpower modes for battery operation
-#include "MQ135.h" // MQ135 Library
+#include <MQ135.h> // MQ135 Library
 
 #define MQ135_PIN A0  // Define MQ135 air quality sensor pin
-#define RZERO 1       // Define RValue for MQ135 sensor
 #define LDR_PIN A1    // Define LDR (Light Dependent Resistor) sensor pin
 
 MQ135 gasSensor = MQ135(MQ135_PIN);

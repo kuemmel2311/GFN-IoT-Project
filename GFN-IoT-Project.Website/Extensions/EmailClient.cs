@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using GFN_IoT_Project.Extensions.Logger;
+using static System.Collections.Specialized.BitVector32;
 
 namespace GFN_IoT_Project.Extensions
 {
@@ -40,7 +41,7 @@ namespace GFN_IoT_Project.Extensions
 
                 using var mailMessage = new MailMessage
                 {
-                    From = new MailAddress(_senderEmail),
+                    From = new MailAddress(_senderEmail, "Smart Weather Station"),
                     Subject = subject,
                     Body = body,
                     IsBodyHtml = false,

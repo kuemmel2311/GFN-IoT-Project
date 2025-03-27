@@ -11,6 +11,11 @@ class Sensor_Read:
         bus = SMBus(1)  # Use 1 for Raspberry Pi 4 I2C bus
         sensor = BME280(i2c_dev=bus)
         try:   
+            # Discard the first reading to avoid garbage data
+            temperature = sensor.get_temperature()
+            pressure = sensor.get_pressure()
+            humidity = sensor.get_humidity()
+            time.sleep(0.5)
             temperature = round(sensor.get_temperature(), 2)
             pressure = round(sensor.get_pressure(), 2)
             humidity = round(sensor.get_humidity(), 2)
