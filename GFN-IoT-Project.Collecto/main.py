@@ -63,4 +63,4 @@ def main_loop():
     except Exception as e:
         print(f"Übertragung Fehlgeschlagen! Fehler: {e}")
 
-data_measurement()
+main_loop()
