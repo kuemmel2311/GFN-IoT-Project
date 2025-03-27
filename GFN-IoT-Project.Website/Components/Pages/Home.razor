@@ -15,7 +15,7 @@
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Thermostat" Color="Color.Primary" />
                         <MudText Typo="Typo.subtitle1" Class="ml-2text-center">Temperatur</MudText>
                     </div>
-                    <MudText Typo="Typo.h5" Color="@GetTemperatureColor(currentTemperature)" Class="text-center">@currentTemperature°C</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetTemperatureColor(currentTemperature)" Class="text-center">@(currentTemperature.ToString("F2"))°C</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -27,7 +27,7 @@
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.WaterDrop" Color="Color.Primary" />
                         <MudText Typo="Typo.subtitle1" Class="ml-2text-center">Luftfeuchtigkeit</MudText>
                     </div>
-                    <MudText Typo="Typo.h5" Color="@GetHumidityColor(currentHumidity)" Class="text-center">@currentHumidity%</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetHumidityColor(currentHumidity)" Class="text-center">@(currentHumidity.ToString("F2"))%</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -39,7 +39,7 @@
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Speed" Color="Color.Primary" />
                         <MudText Typo="Typo.subtitle1" Class="ml-2 text-center">Luftdruck</MudText>
                     </div>
-                    <MudText Typo="Typo.h5" Color="@GetPressureColor(currentPressure)" Class="text-center">@currentPressure hPa</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetPressureColor(currentPressure)" Class="text-center">@(currentPressure) hPa</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -51,7 +51,7 @@
                         <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Masks" Color="Color.Primary" />
                         <MudText Typo="Typo.subtitle1" Class="ml-2 text-center">Luftqualität</MudText>
                     </div>
-                    <MudText Typo="Typo.h5" Color="@GetAirQualityColor(currentAirQuality)" Class="text-center">@currentAirQuality PPM</MudText>
+                    <MudText Typo="Typo.h5" Color="@GetAirQualityColor(currentAirQuality)" Class="text-center">@(currentAirQuality.ToString("F4")) PPM</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -382,7 +382,6 @@
             LoadPressureDataChartAsync(),
             LoadAirQualityDataChartAsync()
         );
-        InvokeAsync(StateHasChanged);
 
     }
     protected override async Task OnInitializedAsync()
