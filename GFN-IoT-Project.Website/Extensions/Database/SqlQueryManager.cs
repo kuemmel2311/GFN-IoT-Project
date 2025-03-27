@@ -10,6 +10,6 @@
         public string INSERT_TEMPERATURE_DATA = "INSERT INTO temperature_data (temperature) VALUES (@Temp);";
         public string INSERT_HUMIDITY_DATA = "INSERT INTO humidity_data (humidity) VALUES (@Humidity);";
         public string INSERT_PRESSURE_DATA = "INSERT INTO pressure_data (pressure) VALUES (@Pressure);";
-        public string INSERT_AIR_QUALITY_DATA = "INSERT INTO air_quality_data (air_quality) VALUES (@AirQ);";
+        public string INSERT_AIR_QUALITY_DATA = "INSERT INTO air_quality_data (airQuality) VALUES (@AirQ);";
     }
 }

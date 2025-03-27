@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS pressure_data (
 CREATE TABLE IF NOT EXISTS air_quality_data (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    air_quality REAL
+    airQuality REAL
 );
 
 -- Create table for storing light level data
@@ -54,7 +54,7 @@ INSERT INTO pressure_data (pressure) VALUES
 (1012.3), (1010.5), (1015.2), (1008.7), (1011.8);
 
 -- Insert dummy air quality data
-INSERT INTO air_quality_data (air_quality) VALUES 
+INSERT INTO air_quality_data (airQuality) VALUES 
 (35.2), (40.1), (38.5), (42.0), (37.8);
 
 -- Insert dummy light level data

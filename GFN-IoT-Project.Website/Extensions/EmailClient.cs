@@ -1,50 +1,59 @@
-﻿namespace GFN_IoT_Project.Extensions
+﻿using System.Net;
+using System.Net.Mail;
+using GFN_IoT_Project.Extensions.Logger;
+
+namespace GFN_IoT_Project.Extensions
 {
-    using System;
-    using System.Net;
-    using System.Net.Mail;
-    public class EmailClient 
+    public class EmailClient
     {
-        private readonly string _smtpServer = "smtp.gmail.com";
-        private readonly int _port = 587; // TLS-port für Gmail
-        private readonly string _emailUsername = Environment.GetEnvironmentVariable("EMAIL_USER")
-            ?? throw new ArgumentNullException(nameof(_emailUsername), "Die Umgebungsvariable 'EMAIL_USER' ist nicht gesetzt.");
-        private readonly string _emailPassword = Environment.GetEnvironmentVariable("EMAIL_pass")
-            ?? throw new ArgumentNullException(nameof(_emailPassword), "Die Umgebungsvariable 'EMAIL_PASS' ist nicht gesetzt.");
+        private readonly string _smtpServer;
+        private readonly int _smtpPort;
+        private readonly string _senderEmail;
+        private readonly string _senderPassword;
+        private readonly string _recipientEmail;
 
+        public EmailClient(string smtpServer, int smtpPort, string senderEmail,
+                           string senderPassword, string recipientEmail)
+        {
+            _smtpServer = smtpServer;
+            _smtpPort = smtpPort;
+            _senderEmail = senderEmail;
+            _senderPassword = senderPassword;
+            _recipientEmail = recipientEmail;
+        }
 
+        public async Task SendEmailAsync(string subject, string body)
+        {
+            await SendAsync(subject, body);
+        }
 
-        public void SendEmial(string from, string to, string subject, string body) 
+        private async Task SendAsync(string subject, string body)
         {
             try
             {
-                using (MailMessage mail = new MailMessage())
+                using var smtpClient = new SmtpClient(_smtpServer)
                 {
-                    mail.From = new MailAddress(from);
-                    mail.To.Add(to);
-                    mail.Subject = subject;
-                    mail.Body = body;
-                    mail.IsBodyHtml = false; // Falls HTM erlaubt ist, auf true setzen
+                    Port = _smtpPort,
+                    Credentials = new NetworkCredential(_senderEmail, _senderPassword),
+                    EnableSsl = true,
+                };
 
-                    using (SmtpClient smtp = new SmtpClient(_smtpServer, _port))
-                    {
-                        smtp.Credentials = new NetworkCredential(_emailUsername, _emailPassword);
-                        smtp.EnableSsl = true;
-                        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                        smtp.Send(mail);
-                    }
+                using var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(_senderEmail),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = false,
+                };
+                mailMessage.To.Add(_recipientEmail);
 
-                }
+                await smtpClient.SendMailAsync(mailMessage);
+                GFNLogger.Log("E-Mail erfolgreich gesendet!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der E-Mail: {ex.Message}");
-
+                GFNLogger.Log($"Fehler beim Senden der E-Mail: {ex.Message}");
             }
         }
-
-
-
     }
-
 }

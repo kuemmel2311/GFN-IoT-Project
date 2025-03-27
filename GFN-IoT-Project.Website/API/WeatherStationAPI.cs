@@ -13,7 +13,6 @@ namespace GFN_IoT_Project.API
         // Database and SQL query managers
         private readonly DatabaseManager CONN;
         private readonly SqlQueryManager SQL;
-
         //constructor
         public WeatherStationAPIController(DatabaseManager db, SqlQueryManager sql)
         {

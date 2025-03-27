@@ -27,6 +27,14 @@ namespace GFN_IoT_Project
             builder.Services.AddSingleton<DatabaseManager>();
             builder.Services.AddSingleton<SqlQueryManager>();
             builder.Services.AddSingleton<LiveUpdateService>();
+            //add email client
+            builder.Services.AddSingleton(new EmailClient(
+             "",     // Your SMTP server
+              465,                      // SMTP port (587 for TLS, 465 for SSL)
+             "",  // Sender email
+             "",        // Sender password
+             ""   // Recipient email
+             ));
 
             // add services to the container.
             builder.Services.AddRazorComponents()

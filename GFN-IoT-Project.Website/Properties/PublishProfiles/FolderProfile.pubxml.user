@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\Student\Documents\GitHub\GFN-IoT-Project\GFN-IoT-Project.Website\bin\Release\net9.0\publish\</_PublishTargetUrl>
-    <History>True|2025-03-24T16:43:07.8708677Z||;True|2025-03-18T20:26:53.5353574+01:00||;</History>
+    <History>True|2025-03-27T13:46:47.7525099Z||;True|2025-03-27T11:34:08.0048519+01:00||;True|2025-03-27T11:33:40.6480531+01:00||;True|2025-03-24T17:43:07.8708677+01:00||;True|2025-03-18T20:26:53.5353574+01:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
