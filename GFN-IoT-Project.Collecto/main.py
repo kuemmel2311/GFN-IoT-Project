@@ -1,3 +1,4 @@
+import time
 import json
 from api_client import API_Request
 from sensor_client import Sensor_Read
@@ -29,6 +30,9 @@ def data_measurement():
     temp, pres, humi = Sensor_Read.ReadTempSensor()
     LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM = Sensor_Read.ReadAirSenor()
 
+    temp = round(temp, 2)
+    humi = round(humi, 2)
+
     if temp != last_data['temp']:
         API_Request.send_temp(temp)
         data_changed = True
@@ -41,6 +45,8 @@ def data_measurement():
         API_Request.send_humidity(humi)
         data_changed = True
 
+    MQ135_PPM = round(MQ135_PPM, 4)
+
     if MQ135_PPM != last_data['airquality']:
         API_Request.send_airquality(MQ135_PPM)
         data_changed = True
@@ -51,5 +57,17 @@ def data_measurement():
 
     if data_changed:
         save_last_data(humi, pres, temp, MQ135_PPM, LDR_DATA)
+
+def main_loop():
+    
+    try:
+        while True:
+            data_measurement()
+        
+            time.sleep(1)
+    except:
+        print("Übertragung Fehlgeschlagen !")
+    
+    
 
 data_measurement()
