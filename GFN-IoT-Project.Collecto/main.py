@@ -23,11 +23,12 @@ def data_measurement():
     data_changed = False
 
     temp, pres, humi = Sensor_Read.ReadTempSensor()
-    LDR_DATA, _, _, MQ135_PPM = Sensor_Read.ReadAirSensor()  
+    LDR_DATA, _, _, MQ135_PPM = Sensor_Read.re
 
     # Check if any sensor data is None
     if temp is None or pres is None or humi is None or LDR_DATA is None or MQ135_PPM is None:
         print("Error: Sensor data is None. Skipping update.")
+        print(f"Temp {temp}, Pres {pres} humi {humi} LDR {LDR_DATA}, PPM: {MQ135_PPM}")
         return
     
     if last_data['temp'] is None or temp != last_data['temp']:
