@@ -18,7 +18,7 @@ class Sensor_Read:
             print("Error")
         return temperature, pressure, humidity
 
-    def ReadAirSenor():
+    def ReadAirSensor():
         LDR_DATA, MQ135_RAW, MQ135_R0, MQ135_PPM = None
         arduino = serial.Serial(Sensor.ArduinoPort, 9600, timeout=1)
         try:
