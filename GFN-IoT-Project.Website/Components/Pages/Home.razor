@@ -207,7 +207,8 @@
     private async void UpdateDateTime(object state)
     {
         currentDateTime = DateTime.Now;
-       await InvokeAsync(StateHasChanged);
+        InvokeAsync(() => StateHasChanged());
+
 
     }
     private void UpdateCharts(object state)
@@ -384,12 +385,13 @@
             LoadAirQualityDataChartAsync()
         );
         UpdateData();
-       await InvokeAsync(StateHasChanged);
+        InvokeAsync(() => StateHasChanged());
+
     }
     protected override async Task OnInitializedAsync()
     {
         UpdateChartsAsync();
-        _TimerCharts = new Timer(UpdateCharts!, null, 0, 10000); // Update every 10 seconds
+        _TimerCharts = new Timer(UpdateCharts!, null, 0, 3000); // Update every 10 seconds
         _timerLive = new Timer(UpdateDateTime!, null, 0, 1000); // Update every second
     }
     public void Dispose()
@@ -402,36 +404,31 @@
         // Check if any values are in danger zone and show notification
         if (IsTemperatureDangerous(currentTemperature) && TemperatureWarning == false)
         {
-            await EmailService.SendEmailAsync("Temperature Warning!!", $"Die Temperatur ist {currentTemperature}");
             TemperatureWarning = true;
-        }else{
+            await EmailService.SendEmailAsync("Temperature Warning!!", $"Die Temperatur ist {currentTemperature}");
+        }
+        else if (!IsTemperatureDangerous(currentTemperature) && TemperatureWarning == true)
+        {
             TemperatureWarning = false;
         }
         if (IsHumidityDangerous(currentHumidity) && HumidityWaring == false)
         {
-            await EmailService.SendEmailAsync("Humidity Warning!!", $"Die Luftfeuchtigkeit ist {currentHumidity}");
             HumidityWaring = true;
+            await EmailService.SendEmailAsync("Humidity Warning!!", $"Die Luftfeuchtigkeit ist {currentHumidity}");
         }   
-        else{
+        else if (!IsHumidityDangerous(currentHumidity) && HumidityWaring == true)
+        {
             HumidityWaring = false;
         }
         if (IsAirQualityDangerous(currentAirQuality) && AirQualityWaring == false)
         {
-            await EmailService.SendEmailAsync("Air Quality Warning!!", $"Die Luftqualität ist {currentAirQuality}");
             AirQualityWaring = true;
-        }else{
+            await EmailService.SendEmailAsync("Air Quality Warning!!", $"Die Luftqualität ist {currentAirQuality}");
+        }
+        else if (!IsAirQualityDangerous(currentAirQuality) && AirQualityWaring == true)
+        {
             AirQualityWaring = false;
         }
-        if (IsPressureDangerous(currentPressure) && PressureWaring == false)
-        {
-            await EmailService.SendEmailAsync("Pressure Warning!!", $"Der Luftdruck ist {currentPressure}");
-            PressureWaring = true;
-        }else{
-            PressureWaring = false; 
-        }
-
-        // Force UI update
-       await InvokeAsync(StateHasChanged);
     }
     private string GetDayNightIcon(int value)
     {

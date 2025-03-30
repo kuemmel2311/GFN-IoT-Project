@@ -29,11 +29,11 @@ namespace GFN_IoT_Project
             builder.Services.AddSingleton<LiveUpdateService>();
             //add email client
             builder.Services.AddSingleton(new EmailClient(
-             "",     // Your SMTP server
-              465,                      // SMTP port (587 for TLS, 465 for SSL)
-             "",  // Sender email
-             "",        // Sender password
-             ""   // Recipient email
+             "mail.your-server.de",     // Your SMTP server
+              587,                      // SMTP port (587 for TLS, 465 for SSL)
+             "sws@flying-phoenix.dev",  // Sender email
+             "2sN71QH26md54d7g",        // Sender password
+             "andrei081993@yahoo.com"   // Recipient email
              ));
 
             // add services to the container.
